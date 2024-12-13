@@ -1,0 +1,150 @@
+
+%
+% File acl2014.tex
+%
+% Contact: g.colavizza@uva.nl
+%%
+%% Based on the style files for ACL-2013, which were, in turn,
+%% Based on the style files for ACL-2012, which were, in turn,
+%% based on the style files for ACL-2011, which were, in turn, 
+%% based on the style files for ACL-2010, which were, in turn, 
+%% based on the style files for ACL-IJCNLP-2009, which were, in turn,
+%% based on the style files for EACL-2009 and IJCNLP-2008...
+
+%% Based on the style files for EACL 2006 by 
+%%e.agirre@ehu.es or Sergi.Balari@uab.es
+%% and that of ACL 08 by Joakim Nivre and Noah Smith
+
+\documentclass[11pt]{article}
+\usepackage{acl2014}
+\usepackage{times}
+\usepackage{url}
+\usepackage{latexsym}
+
+%\setlength\titlebox{5cm}
+
+% You can expand the titlebox if you need extra space
+% to show all the authors. Please do not make the titlebox
+% smaller than 5cm (the original size); we will check this
+% in the camera-ready version and ask you to change it back.
+
+\title{Language and Mental Health}
+
+\author{
+  \textbf{Virginia Vento}\\
+  {\small \tt virginia.vento@studio.unibo.it} \\
+  \and
+  \textbf{Bianca De Crecchio}\\
+  {\small \tt bianca.decrecchio@studio.unibo.it}
+}
+
+
+\begin{document}
+\maketitle
+\begin{abstract}
+  Questo progetto esplora come lo stato mentale delle persone influenzi il loro linguaggio. L'obiettivo è identificare caratteristiche linguistiche distintive di sei diversi disturbi mentali e confrontare questi pattern fra loro, oltre che con il linguaggio di individui neurotipici. Il lavoro si sviluppa in ottica interdisciplinare, con l’intento di integrare tecniche computazionali recentemente acquisite con le nostre conoscenze di linguistica, facendo riferimento a importanti pubblicazioni in ambito medico e psicolinguistico. 
+\end{abstract}
+
+\section{Introduzione}
+
+L’idea del progetto nasce dal nostro interesse per un tema che riguarda noi e tutta la comunità in generale: la salute mentale. Sempre più spesso si parla di come il linguaggio possa essere un importante indicatore di problematiche psicologiche e di come, prestando attenzione alle parole frequentemente scritte e pronunciate da chi ci sta vicino, possiamo percepire il loro reale stato d’animo ed eventuali indicatori di alcuni disturbi mentali\footnote{Newell et al., 2017; Sekulic et al., 2018; Bazziconi et al., 2020; Lanidi et al., 2022; Stade et al., 2023}. Avendo già acquisito - durante il primo anno di magistrale in Linguistica - alcune conoscenze nel campo del NLP, siamo rimaste entrambe molto colpite dai task di \textit{sentiment analysis} ed \textit{emotion detection}, utilizzati da linguisti ed esperti di linguaggio in varie branche di studio. L’intenzione è stata, quindi, sin da subito, quella di prendere in considerazione un dataset che potesse essere analizzato in quest’ottica. L’obiettivo è andare alla ricerca di pattern linguistici presenti negli enunciati etichettati nel dataset come prodotti da individui affetti da disturbi mentali, in modo da metterli a confronto fra loro e offrire alcuni utili spunti per intercettare la presenza di questi disagi in chi ci sta vicino, magari ancor prima che ci sia stata una vera e propria diagnosi. Durante lo sviluppo di questo progetto, ci siamo confrontate continuamente, discutendo e affinando le nostre idee in ogni passaggio. Solo alla fine, quando il codice era ormai terminato, abbiamo deciso di affidare a Bianca De Crecchio il \textit{testing} delle funzioni e la revisione del codice e dei commenti, mentre a Virginia Vento la ricerca di contributi autorevoli e la redazione del presente report.
+
+\section{Dati e preparazione}
+\subsection{Descrizione del dataset}
+\label{sect:pdf}
+
+Dopo aver preso in considerazione varie raccolte di dataset online, ci siamo soffermate su Kaggle\footnote{\url{https://www.kaggle.com/datasets}} e, in particolare, sul dataset chiamato Combined Data\footnote{\url{https://www.kaggle.com/datasets/suchintikasarkar/sentiment-analysis-for-mental-health?resource=download}} , che consiste in nove data set combinati fra loro e contenenti 53.043 enunciati classificati in base a uno fra i seguenti sette stati di salute mentale: \textit{Normal} (16351 enunciati), \textit{Depression} (15404 enunciati), \textit{Suicidal} (10653 enunciati), \textit{Anxiety} (3888 enunciati), \textit{Bipolar} (2877 enunciati), \textit{Stress} (2669 enunciati), \textit{Personality Disorder} (1201 enunciati). I dataset che compongono il file da noi rinominato \texttt{combined\_data}, provengono da vari social media come Reddit e Twitter. Il file di partenza ha tre colonne: nella prima, sono visualizzati i valori unici abbinati a ciascun enunciato (da 0 a 53042); nella seconda, chiamata \texttt{statement}, sono contenuti gli enunciati estratti dai social media e nella terza (\texttt{status}) si trova il nome dello status mentale abbinato a ciascun enunciato.
+
+\subsection{Pre-processing dei dati}
+\label{ssec:layout}
+
+Gli enunciati sono stati pre-processati attraverso queste operazioni: rimozione della punteggiatura (sostituita da spazi); tokenizzazione (cioè, la suddivisione del testo in unità fondamentali o “token” per facilitarne l’elaborazione) e lemmatizzazione (tramite la libreria NLTK), attraverso cui le parole vengono ridotte alla loro forma base (es. feeling → feel). Questi passaggi sono stati fondamentali per ottenere un testo (inteso come l’insieme degli enunciati) normalizzato, cioè uniforme e facile da analizzare in ambito di NLP. In particolare, il processo di lemmatizzazione è stato applicato rimuovendo le stopwords, cioè quelle parole ad alta frequenza e a bassa informatività semantica come “and” che, per la Legge di Zipf\footnote{Zipf, G. K., 1949. },  non sono portatrici di un significato rilevante per l’analisi del testo. 
+
+\section{Analisi: statistiche e polarità}
+\subsection{Ricerca delle parole più frequenti}
+\label{ssec:layout}
+
+Attraverso le funzioni \texttt{get\_most\_freq\_words} e \texttt{get\_most\_freq\_bigrams} abbiamo trovato, rispettivamente, le cento parole e i cento bigrammi più frequenti per ogni status mentale, ottenendo una panoramica generale del linguaggio caratteristico di ciascun gruppo. Dal nostro punto di vista, è interessante notare come, fra le tre parole più frequentemente utilizzate da tutti i gruppi - eccetto \textit{Normal}\footnote{Inteso come il Control Group (C.G.), costituito da enunciati classificati nel dataset combinato come prodotti da persone neurotipiche.}-, compaiano sempre “feel” e “like”, che, tra l’altro, formano anche il bigramma più frequente in molti dei disturbi. Inoltre, nel caso di \textit{Anxiety}, la parola più frequente è proprio “anxiety”. La nostra ipotesi è che le persone con disturbi mentali siano più inclini di quelle neurotipiche a comunicare i propri stati d’animo, magari con l’obiettivo di essere compresi dagli altri, oppure come conseguenza di un meccanismo di \textit{coping} per la gestione delle proprie emozioni. 
+
+\subsection{Calcolo della polarità e distribuzione relativa del \textit{sentiment}}
+\label{ssec:first}
+
+Il testo pre-processato è stato poi analizzato utilizzando VADER, in modo tale da ottenere un “punteggio di polarità” per ogni enunciato. In base a tale valutazione, dunque, ogni enunciato è stato classificato secondo il \textit{sentiment}: negativo (polarità \texttt{<} -0,05), neutro (polarità compresa fra -0,05 e 0,05) o positivo (polarità \texttt{>} 0,05). 
+Avendo questi dati, abbiamo potuto visualizzare più nel dettaglio la distribuzione relativa\footnote{Al fine di normalizzare i risultati e garantire un confronto equo tra i sette gruppi di stati mentali, abbiamo calcolato la distribuzione relativa del \textit{sentiment} per ciascun gruppo, evitando così bias derivanti dal semplice calcolo delle frequenze assolute.} del \textit{sentiment} nei sette gruppi di enunciati, corrispondenti ai sette status mentali. I risultati possono essere visionati nel grafico \texttt{sent\_distr\_plot.png}, generato con la libreria Matplotlib. È interessante notare che il gruppo \textit{Normal} è costituito da circa il \texttt{42\%} di enunciati positivi, circa il \texttt{35\%} di enunciati neutri e solo il \texttt{22\%} circa di negativi. Come ci si potrebbe aspettare, i testi classificati come prodotti da persone neurotipiche hanno un \textit{sentiment} molto equilibrato, più tendente verso la positività e l’ottimismo\footnote{Diener et al., 2015.}. Al contrario, notiamo che, in particolare nei gruppi \textit{Anxiety}, \textit{Depression}, \textit{Stress} e \textit{Suicidal}, gli enunciati negativi superano di gran lunga quelli positivi, rispettivamente: \texttt{72\%} vs. \texttt{24\%}; \texttt{62\%} vs. \texttt{34\%}; \texttt{59\%} vs. \texttt{35\%} e \texttt{69\%} vs. \texttt{27\%}. È possibile che i sopracitati disturbi mentali siano la causa di questo evidente squilibrio a favore di enunciati negativi e pessimistici? La risposta è sì, soprattutto a causa del meccanismo psicologico, molto frequente nelle persone affette da depressione e noto come “Repetitive Negative Thinking” (RNT), che consiste in pensieri ricorrenti e ossessivi riguardo al passato e al futuro che incidono negativamente sul modo in cui queste persone si percepiscono\footnote{Peixoto – Cunha, 2022.}. Si distinguono i gruppi \textit{Bipolar} e \textit{Personality Disorder}, che presentano bassi livelli di enunciati neutri e quasi un’equa distribuzione di enunciati negativi e positivi, rispettivamente: \texttt{48\%} vs. \texttt{45\%} e \texttt{41\%} vs. \texttt{44\%}. In effetti, è stato dimostrato che i pazienti bipolari normotimici\footnote{Per “normotimico” s’intende uno stato di equilibrio emotivo, in cui il tono dell'umore si mantiene entro i limiti considerati normali, senza manifestazioni di alterazioni patologiche come depressione o mania.} mostrano livelli più elevati di labilità e intensità emotiva rispetto ai pazienti di controllo\footnote{M’Bailara et al., 2009.}. Per analizzare le differenze fra i testi del gruppo \textit{Normal} e tutti gli altri presi insieme, la stessa operazione è stata ripetuta considerando gli enunciati come divisi in due gruppi distinti: quelli prodotti dalla popolazione di pazienti (P.P.) e quelli del gruppo di controllo (C.G. o \textit{Normal}). I risultati di quest’analisi sono visibili nel grafico \texttt{sdp\_PPvsCG.png}, anch’esso generato con la libreria Matplotlib. 
+Questo grafico conferma quanto spiegato sopra: gli enunciati negativi appartenenti ai P.P. sono - in proporzione - decisamente superiori rispetto a quelli del C.G. Inoltre, gli enunciati neutri nei P.P. sono pressoché nulli, suggerendo che questi pazienti comunichino attraverso espressioni estreme (soprattutto negative) dal punto di vista del \textit{sentiment}. 
+
+\subsection{Diagrammi di Venn}
+\label{ssec:layout}
+
+Il passaggio successivo è stato quello di confrontare fra loro coppie di gruppi di enunciati per indagare gli eventuali \textit{overlap} fra queste e, dunque, fra coppie di stati mentali.   Per farlo, ci siamo servite dei diagrammi di Venn contenuti nella sottocartella \texttt{Venn\_diagrammi}, all’interno della cartella \texttt{plots}. Attraverso tali diagrammi, è possibile visualizzare il numero delle parole comuni tra coppie di stati. Dai dati a nostra disposizione, emerge che la coppia di stati col maggior numero di parole in comune è quella formata da \textit{Depression} e \textit{Suicidal}.
+
+\section{\textit{\textit{Emotion detection}} e \textit{testing}}
+\subsection{Creazione di un dizionario di \textit{synset} per emozioni}
+\label{ssec:layout}
+
+Fino a qui, si è tenuto conto di tutte le parole pre-processate: abbiamo, quindi, pensato di continuare la nostra indagine prendendo in considerazione solo le parole connesse semanticamente alla sfera emotiva. Dunque, attraverso la funzione \texttt{get\_emotion\_synsets}, abbiamo creato un dizionario associando otto “macro-emozioni”\footnote{Sono quelle che Robert Plutchik (1980) definisce "emozioni primarie e basilari".} a un insieme di \textit{synset} di WordNet. Dopodiché, è stata definita la funzione \texttt{get\_words\_from\_emotion\_synsets} per ottenere i lemmi associati a ciascun \textit{synset} nel dizionario, costruendo un lessico emozionale per ogni “macro-emozione”. Per facilitarne il confronto, tali lemmi (d'ora in poi chiamati "parole emozione") sono stati raccolti in forma normalizzata nel dizionario \texttt{emotion\_lex\_norm}.
+
+\subsection{Parole emozione}
+\label{ssec:layout}
+
+Utilizzando il dizionario menzionato nel paragrafo precedente, abbiamo calcolato la frequenza delle parole emozione utilizzate negli \textit{statements} di ciascuno stato mentale. I risultati di questa domanda di ricerca sono visualizzabili nei grafici a barre ottenuti con la libreria Matplotlib e contenuti nella sottocartella \texttt{em\_words\_status}, in \texttt{plots}. Osservando tali grafici in parallelo, notiamo che
+l’emozione “care”, intesa come "preoccupazione"\footnote{Infatti, la parola emozione "care" appartiene al \textit{synset} "concern.n.02", associato alla macro-emozione "fear".}, è quella in assoluto più frequentemente evocata, fatta eccezione per \textit{Anxiety} e \textit{Personality Disorder}, per i quali, invece, la parola emozione prevalente è “fear”. Quest'ultimo dato assume particolare rilevanza alla luce dei più recenti studi sul rapporto fra ansia e paura, due emozioni che, oltre ad essere percepite come molto simili, condividono circuiti cerebrali sovrapposti\footnote{Hur et al., 2020.}. Inoltre, è stato dimostrato come la paura dell'abbandono e del rifiuto sociale siano elementi chiave di alcuni disturbi della personalità\footnote{Liu et al., 2024; Solmi et al., 2021.}. Durante la nostra indagine, non abbiamo trovato studi che possano giustificare il fatto che "care" sia la parola emozione che emerge prevalentemente negli \text{statements} del dataset; ciò potrebbe dipendere dalla mancanza di ricerche su questo aspetto. Riteniamo tuttavia rilevante osservare che, indipendentemente dallo stato mentale, la macro-emozione dominante nel dataset risulta essere "fear" (da non confondere con la parola emozione "fear" citata precedentemente). Secondo la nostra interpretazione, questo risultato potrebbe riflettere l'aumento generalizzato delle paure e delle insicurezze nella società contemporanea, alimentato da fattori come il flusso costante di notizie su eventi globali negativi e l'incertezza economica e sociale, fenomeni che colpiscono soprattutto i più giovani, che sono anche la fascia di utenti più numerosa sui social media. 
+
+\subsection{Calcolo similarità coseno}
+\label{ssec:layout}
+
+Infine, abbiamo messo a confronto la frequenza delle singole parole emozione per ciascuno stato mentale, utilizzando le librerie Scikit-learn e Numpy per rappresentare ogni status come un vettore numerico basato sulla frequenza delle parole emozione\footnote{Se una parola emozione non è presente in uno specifico status, il valore corrispondente nel vettore rimane a zero, poiché il vettore viene inizializzato con valori nulli.}. Dunque, abbiamo calcolato la similarità tra i vettori di ciascuna coppia di stati utilizzando la similarità coseno. I risultati sono stati visualizzati attraverso un network (usando la libreria NetworkX), dove i nodi rappresentano gli stati mentali e gli archi indicano il grado di similarità (coseno) tra di essi, e salvati in un file PNG (\texttt{cos\_simi\_graph.png}). Inoltre, i dati di similarità sono stati esportati nel file CSV \texttt{similarities.csv}. Da queste analisi, si riscontra la minima similarità fra \textit{Anxiety} e \textit{Suicidal}, mentre la massima fra \textit{Depression} e \textit{Suicidal}. In effetti, la stretta connessione tra questi due stati mentali è evidenziata dal fatto che la depressione spesso precede e si associa a comportamenti e pensieri suicidari\footnote{Ribeiro et al., 2018}. 
+
+\subsection{\textit{Testing}}
+\label{ssec:layout}
+
+A completamento del progetto, con il modulo Unittest, abbiamo verificato il corretto funzionamento di ogni funzione da noi creata, in modo da garantire che i risultati siano affidabili e replicabili. 
+
+\section{Conclusioni}
+
+Dopo aver analizzato i dati a nostra disposizione nei modi che sono stati fin qui descritti, e dopo aver provato a dare delle spiegazioni ai nostri risultati facendo delle ipotesi, ci siamo confrontate con teorie ed evidenze in campo medico e psicolinguistico. Possiamo concludere che i risultati ottenuti – seppur rappresentativi di una piccolissima parte degli utenti di diversi social media, come Reddit e Twitter – sono in linea con la più recente letteratura sui disturbi mentali e confermano uno strettissimo legame fra salute mentale e linguaggio. Per ragioni di spazio, non possiamo approfondire ulteriormente le analisi, ma speriamo che i risultati ottenuti possano costituire una base significativa per studi futuri, ad esempio nella valutazione della salute mentale di un individuo attraverso il linguaggio. 
+
+\section*{References}
+\subsection*{Documentazione}
+\label{ssec:layout}
+
+
+\begin{itemize}
+    \item \url{https://matplotlib.org/stable/index.html} Matplotlib documentation
+    \item \url{https://networkx.org/documentation/stable/reference/index.html} Networkx documentation
+    \item \url{https://www.nltk.org/index.html} NLTK documentation
+    \item \url{https://numpy.org/doc/} Numpy documentation
+    \item \url{https://pandas.pydata.org/docs/user_guide/index.html#user-guide} Pandas documentation
+    \item \url{https://docs.python.org/3/} Python documentation
+    \item \url{https://scikit-learn.org/stable/modules/metrics.html#cosine-similarity} Scikit documentation
+    \item \url{https://seaborn.pydata.org/tutorial.html} Seaborn documentation
+\end{itemize}
+
+
+
+\subsection*{Testi e articoli}
+\label{ssec:layout}
+
+
+\begin{itemize}
+    \item Bazziconi, P., Berrouiguet, S., Kim-Dufor, D., Walter, M., \& Lemey, C. (2020). Linguistic markers in improving the predictive model of the transition to schizophrenia. \textit{L'Encephale}. \url{https://doi.org/10.1016/j.encep.2020.08.003}
+    \item Benazzi, F. (2007). Is There a Continuity between Bipolar and Depressive Disorders?. \textit{Psychotherapy and Psychosomatics, 76}, 70 - 76. \url{https://doi.org/10.1159/000097965}
+    \item Diener, E., Kanazawa, S., Suh, E. M., \& Oishi, S. (2015). Why People Are in a Generally Good Mood. \textit{Personality and Social Psychology Review, 19}(3), 235-256. \url{https://doi.org/10.1177/1088868314544467}
+    \item Hur, J., Smith, J. F., DeYoung, K. A., Anderson, A. S., Kuang, J., Kim, H. C., ... \& Shackman, A. J. (2020). Anxiety and the neurobiology of temporally uncertain threat anticipation. Journal of Neuroscience, 40(41), 7949-7964. 
+    \item Joiner, T. (2005). \textit{Why People Die by Suicide}. Harvard University Press.
+    \item Lainidi, O., Lavelle, M., Johnson, J., Dehghan, M., Sexton, J., Belz, F., Adair, K., Proulx, J., \& Frankel, A. (2022). The language of healthcare worker emotional exhaustion: A linguistic analysis of longitudinal survey. \textit{Frontiers in Psychiatry, 13}.
+    \item Liu, Y., Chen, C., Zhou, Y., Zhang, N., \& Liu, S. (2024). Twenty years of research on borderline personality disorder: a scientometric analysis of hotspots, bursts, and research trends. Frontiers in psychiatry, 15, 1361535. \url {https://doi.org/10.3389/fpsyt.2024.1361535}
+    \item Maslow, A. H. (1943). A Theory of Human Motivation. \textit{Psychological Review, 50}(4), 370–396.
+    \item M'Bailara, K., Demotes-Mainard, J., Swendsen, J., Mathieu, F., Leboyer, M., \& Henry, C. (2009). Emotional hyper-reactivity in normothymic bipolar patients. \textit{Bipolar Disord.}, 11(1), 63-69. \url{https://doi.org/10.1111/j.1399-5618.2008.00656.x} \text{PMID: 19133967}
+    \item Newell, E., Mccoy, S., Newman, M., Wellman, J., \& Gardner, S. (2017). You Sound So Down: Capturing Depressed Affect Through Depressed Language. \textit{Journal of Language and Social Psychology, 37}, 451 - 474. \url{https://doi.org/10.1177/0261927X17731123}
+    \item Peixoto, M. M., \& Cunha, O. (2022). Repetitive Negative Thinking, Rumination, Depressive Symptoms and Life Satisfaction: A cross-sectional mediation analysis. \textit{International Journal of Psychology \& Psychological Therapy, 22}(2), 211-221.
+    \item Plutchik, R. (1980). A general psychoevolutionary theory of emotion. Emotion: Theory, research, and experience, 1.
+    \item Ribeiro, J., Huang, X., Fox, K., \& Franklin, J. (2018). Depression and hopelessness as risk factors for suicide ideation, attempts and death: meta-analysis of longitudinal studies. British Journal of Psychiatry, 212, 279 - 286. https://doi.org/10.1192/bjp.2018.27.
+    \item Sekulic, I., Gjurkovic, M., \& Šnajder, J. (2018). Not Just Depressed: Bipolar Disorder Prediction on Reddit. \textit{ArXiv}. \url{https://doi.org/10.18653/v1/W18-6211}
+    \item Solmi, M., Dragioti, E., Croatto, G., Radua, J., Borgwardt, S., Carvalho, A. F., ... \& Fusar-Poli, P. (2021). Risk and protective factors for personality disorders: an umbrella review of published meta-analyses of case–control and cohort studies. Frontiers in Psychiatry, 12, 679379. \url {https://doi.org/10.3389/fpsyt.2021.679379}
+    \item Stade, E. C., Ungar, L., Eichstaedt, J. C., Sherman, G., \& Ruscio, A. M. (2023). Depression and anxiety have distinct and overlapping language patterns: Results from a clinical interview. \textit{Journal of Psychopathology and Clinical Science}.
+    \item Zipf, G. K. (1949). \textit{Human Behavior and the Principle of Least Effort}. Addison-Wesley.
+\end{itemize}
+
+\end{document}
+

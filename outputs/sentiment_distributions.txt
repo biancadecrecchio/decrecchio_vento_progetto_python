@@ -1,0 +1,31 @@
+Relative distribution of sentiment by Status:
+Status: Anxiety, Sentiment: Negative, Proportion: 72.43%
+Status: Anxiety, Sentiment: Neutral, Proportion: 3.24%
+Status: Anxiety, Sentiment: Positive, Proportion: 24.33%
+Status: Bipolar, Sentiment: Negative, Proportion: 48.14%
+Status: Bipolar, Sentiment: Neutral, Proportion: 6.26%
+Status: Bipolar, Sentiment: Positive, Proportion: 45.60%
+Status: Depression, Sentiment: Negative, Proportion: 62.66%
+Status: Depression, Sentiment: Neutral, Proportion: 2.66%
+Status: Depression, Sentiment: Positive, Proportion: 34.69%
+Status: Normal, Sentiment: Negative, Proportion: 22.45%
+Status: Normal, Sentiment: Neutral, Proportion: 34.99%
+Status: Normal, Sentiment: Positive, Proportion: 42.56%
+Status: Personality disorder, Sentiment: Negative, Proportion: 41.63%
+Status: Personality disorder, Sentiment: Neutral, Proportion: 13.74%
+Status: Personality disorder, Sentiment: Positive, Proportion: 44.63%
+Status: Stress, Sentiment: Negative, Proportion: 59.31%
+Status: Stress, Sentiment: Neutral, Proportion: 5.43%
+Status: Stress, Sentiment: Positive, Proportion: 35.26%
+Status: Suicidal, Sentiment: Negative, Proportion: 69.03%
+Status: Suicidal, Sentiment: Neutral, Proportion: 3.36%
+Status: Suicidal, Sentiment: Positive, Proportion: 27.61%
+
+Relative distribution of sentiment in P.P. vs C.G:
+Group: C.G., Sentiment: Negative, Relative Frequency: 22.45%
+Group: C.G., Sentiment: Neutral, Relative Frequency: 34.99%
+Group: C.G., Sentiment: Positive, Relative Frequency: 42.56%
+Group: P.P., Sentiment: Negative, Relative Frequency: 63.47%
+Group: P.P., Sentiment: Neutral, Relative Frequency: 3.77%
+Group: P.P., Sentiment: Positive, Relative Frequency: 32.76%
+

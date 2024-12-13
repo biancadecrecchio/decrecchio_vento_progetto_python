@@ -1,0 +1,8 @@
+pandas
+nltk
+seaborn 
+matplotlib
+matplotlib-venn
+scikit-learn
+numpy
+networkx

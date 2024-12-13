@@ -1,0 +1,43 @@
+Status1,Status2,Cosine Similarity
+Anxiety,Normal,0.5494962112427251
+Anxiety,Depression,0.487344442433117
+Anxiety,Suicidal,0.4335311735000434
+Anxiety,Stress,0.8339441408576503
+Anxiety,Bipolar,0.6333065269701791
+Anxiety,Personality disorder,0.9013730887412391
+Normal,Anxiety,0.5494962112427251
+Normal,Depression,0.9822245527658329
+Normal,Suicidal,0.9741933767670505
+Normal,Stress,0.8914377991612131
+Normal,Bipolar,0.9785060460465799
+Normal,Personality disorder,0.8197290758942584
+Depression,Anxiety,0.487344442433117
+Depression,Normal,0.9822245527658329
+Depression,Suicidal,0.9933421952070258
+Depression,Stress,0.8641985469109519
+Depression,Bipolar,0.9610793102333407
+Depression,Personality disorder,0.7782320928742462
+Suicidal,Anxiety,0.4335311735000434
+Suicidal,Normal,0.9741933767670505
+Suicidal,Depression,0.9933421952070258
+Suicidal,Stress,0.8269915985821603
+Suicidal,Bipolar,0.9388493575752921
+Suicidal,Personality disorder,0.7383953637095618
+Stress,Anxiety,0.8339441408576503
+Stress,Normal,0.8914377991612131
+Stress,Depression,0.8641985469109519
+Stress,Suicidal,0.8269915985821603
+Stress,Bipolar,0.9426247962159128
+Stress,Personality disorder,0.9647274933129811
+Bipolar,Anxiety,0.6333065269701791
+Bipolar,Normal,0.9785060460465799
+Bipolar,Depression,0.9610793102333407
+Bipolar,Suicidal,0.9388493575752921
+Bipolar,Stress,0.9426247962159128
+Bipolar,Personality disorder,0.8610426084061275
+Personality disorder,Anxiety,0.9013730887412391
+Personality disorder,Normal,0.8197290758942584
+Personality disorder,Depression,0.7782320928742462
+Personality disorder,Suicidal,0.7383953637095618
+Personality disorder,Stress,0.9647274933129811
+Personality disorder,Bipolar,0.8610426084061275
